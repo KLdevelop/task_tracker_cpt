@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+$ff: Inter;
+
+button {
+    cursor: pointer;
+    outline: none !important;
+}
+
+.todoPage{
+    font-family: $ff;
+    .bttn:hover{
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+    .bttn:active {
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+    header {
+        text-align: center;
+        height: 110px;
+        width: 100vw;
+        *{
+            display: inline-block;
+        }
+        h1 {
+            font-weight: 600;
+            font-size: 32px;
+            color: #FF7A00;
+            span {
+                color: black;
+            }
+        }
+        h2 {
+            margin-left: 40%;
+            margin-right: 15px;
+            font-weight: normal;
+            font-size: 18px;
+            color: #0047FF;
+        }
+        button {
+            background: white;
+            border: 2px solid #0047FF;
+            box-sizing: border-box;
+            border-radius: 8px;
+            color: #0047FF;
+            width: 203px;
+            height: 56px;
+            font-weight: 500;
+            font-size: 18px;
+        }
+    }
+}
