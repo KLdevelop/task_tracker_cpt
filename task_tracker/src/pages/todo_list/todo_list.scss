@@ -33,62 +33,71 @@ button {
         margin-bottom: 3px;
         display: inline-block;
     }
-    header {
-        text-align: center;
-        height: 110px;
-        width: 100vw;
-        *{
-            display: inline-block;
-        }
-        h1 {
-            font-weight: 600;
-            font-size: 32px;
-            color: #FF7A00;
-            span {
-                color: black;
+    header {    
+        .headCont{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-left: auto;
+            margin-right: auto;
+            height: 110px;
+            width: 1247px;
+            *{
+                display: inline-block;
+            }
+            h1 {
+                font-weight: 600;
+                font-size: 32px;
+                color: #FF7A00;
+                span {
+                    color: black;
+                }
+            }
+            h2 {
+                margin-right: 15px;
+                font-weight: normal;
+                font-size: 18px;
+                color: #0047FF;
+                .sArrow {
+                    transform: rotate(135deg);
+                }
+            }
+            button {
+                background: white;
+                border: 2px solid #0047FF;
+                box-sizing: border-box;
+                border-radius: 8px;
+                color: #0047FF;
+                width: 203px;
+                height: 56px;
+                font-weight: 500;
+                font-size: 18px;
             }
         }
-        h2 {
-            margin-left: 40%;
-            margin-right: 15px;
-            font-weight: normal;
-            font-size: 18px;
-            color: #0047FF;
-            .sArrow {
-                transform: rotate(135deg);
-            }
-        }
-        button {
-            background: white;
-            border: 2px solid #0047FF;
-            box-sizing: border-box;
-            border-radius: 8px;
-            color: #0047FF;
-            width: 203px;
-            height: 56px;
-            font-weight: 500;
-            font-size: 18px;
-        }
-    
     }
     .todoH {
         font-weight: 500;
         font-size: 36px;
-        margin-left: 13.5%;
+        width: 1247px;
+        margin-left: auto;
+        margin-right: auto;
     }
     .mainCont{
         margin-bottom: 100px;
-        margin-left: 13.5%;
+        width: 1247px;
+        height: 618px;
         h2 {
             font-weight: 500;
             font-size: 18px;
         }
         display: flex;
         flex-direction: row;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
         .leftFilt {
             height: 904px;
             width: 350px;
-            //width: 500px;
             border-color: #F0F0F0;
             border-right: 1px;
             .titleFilt {
@@ -178,8 +187,11 @@ button {
             width: 904px;
             height: 618px;
             margin-left: 15px;
+            display: table;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
             div {
                 h3 {
+                    display: table-cell;
                     font-weight: normal;
                     font-size: 18px;
                 }

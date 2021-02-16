@@ -6,14 +6,18 @@ class TodoListPage extends Component {
         return(
             <div className="todoPage">
                 <header>
-                    <h1>Task<span>Tracker</span></h1>
-                    <h2>
-                        <>
-                            <div className="sArrow"/>
-                            Login
-                        </>
-                    </h2>
-                    <button className="bttn">Создать задачу</button>
+                    <div className="headCont">
+                        <h1>Task<span>Tracker</span></h1>
+                        <div>
+                            <h2>
+                                <>
+                                    <div className="sArrow"/>
+                                    Login
+                                </>
+                            </h2>
+                            <button className="bttn">Создать задачу</button>
+                        </div>
+                    </div>
                 </header>
                 <h1 className="todoH">Список задач</h1>
                 <div className="mainCont">
