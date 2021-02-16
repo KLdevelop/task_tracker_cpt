@@ -92,12 +92,12 @@ button {
         }
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        justify-content: space-between;
         margin-left: auto;
         margin-right: auto;
         .leftFilt {
             height: 904px;
-            width: 350px;
+            width: 320px;
             border-color: #F0F0F0;
             border-right: 1px;
             .titleFilt {
@@ -112,17 +112,17 @@ button {
                     border-radius: 6px;
                     * {
                         display: inline-block;
-                        margin-top: 12px;
                     }
                     .loupe {
                         width: 16px;
-                        height: 17px;
+                        height: 16px;
                         background: url("../../icons/loupe.png") center no-repeat;
                         background-size: cover;
                         margin-left: 10px;
                         margin-right: 10px;
                     }
                     input{
+                        margin-top: 12px;
                         height: 18px;
                         font-weight: normal;
                         font-size: 16px;
@@ -182,18 +182,28 @@ button {
                 }
             }
         }
-
+        hr {
+            border: 1px solid #F0F0F0;
+        }
         .rightTable {
             width: 904px;
             height: 618px;
             margin-left: 15px;
-            display: table;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
             div {
+                box-sizing: border-box;
+                border-bottom: 1px;
+                display: grid;
+                grid-template-columns: 384px 183px 183px 1fr;
+                padding-left: 10px;
                 h3 {
-                    display: table-cell;
                     font-weight: normal;
                     font-size: 18px;
+                }
+                .greyH {
+                    color: #6A6F80;
+                }
+                .blueH {
+                    color: #0047FF;
                 }
             }
         }
