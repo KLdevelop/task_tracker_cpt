@@ -1,20 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 $ff: Inter;
+$arState: -1; 
 
 button {
     cursor: pointer;
+}
+
+* {
     outline: none !important;
 }
 
 .todoPage{
-    font-family: $ff;
+    * {
+        font-family: $ff;
+    }
     .bttn:hover{
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     }
     .bttn:active {
         box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
         background-color: rgba(0, 0, 0, 0.02);
+    }
+    .sArrow {
+        width: 7px;
+        height: 7px;
+        border-top: 1.5px solid #0047FF;
+        border-right: 1.5px solid #0047FF;
+        margin-left: -5px;
+        margin-right: 5px;
+        margin-bottom: 3px;
+        display: inline-block;
     }
     header {
         text-align: center;
@@ -37,6 +53,9 @@ button {
             font-weight: normal;
             font-size: 18px;
             color: #0047FF;
+            .sArrow {
+                transform: rotate(135deg);
+            }
         }
         button {
             background: white;
@@ -48,6 +67,111 @@ button {
             height: 56px;
             font-weight: 500;
             font-size: 18px;
+        }
+    
+    }
+    .todoH {
+        font-weight: 500;
+        font-size: 36px;
+        margin-left: 13.5%;
+    }
+    .mainCont{
+        margin-bottom: 100px;
+        margin-left: 13.5%;
+        h2 {
+            font-weight: 500;
+            font-size: 18px;
+        }
+        display: flex;
+        flex-direction: row;
+        .leftFilt {
+            margin-right: 15px;
+            .titleFilt {
+                .sArrow {
+                    transform: rotate(135deg);
+                }
+                .titleInp {
+                    width: 300px;
+                    height: 50px;
+                    border: 1px solid #9299B0;
+                    box-sizing: border-box;
+                    border-radius: 6px;
+                    * {
+                        display: inline-block;
+                        margin-top: 12px;
+                    }
+                    .loupe {
+                        width: 16px;
+                        height: 17px;
+                        background: url("../../icons/loupe.png") center no-repeat;
+                        background-size: cover;
+                        margin-left: 10px;
+                        margin-right: 10px;
+                    }
+                    input{
+                        height: 18px;
+                        font-weight: normal;
+                        font-size: 16px;
+                        width: 248px;
+                        border: unset;
+                    }
+                }
+            }
+            .periodFilt {
+                .sArrow {
+                    transform: rotate(135deg);
+                }
+                .perInp {
+                    display: inline-block;
+                    margin-right: 5px;
+                }
+                
+                input {
+                    width: 136px;
+                    height: 50px;
+                    border: 1px solid #9299B0;
+                    border-radius: 6px;
+                    display: inline-block;
+                }
+                .horLine{
+                    display: inline-block;
+                    width: 14px;
+                    height: 1px;
+                    background: #9299B0;
+                    border-radius: 1px;
+                    margin-right: 5px;
+                }
+            }
+            .sortFilt {
+                .sArrow {
+                    transform: rotate(135deg);
+                }
+                .radioSort {
+                    div {
+                        margin-bottom: 10px;
+                    }
+                    label {
+                        font-weight: normal;
+                        font-size: 16px;
+                    }
+                }
+            }
+            .showFilt {
+                .sArrow {
+                    transform: rotate(45deg);
+                }
+            }
+            .infoFilt {
+                .sArrow {
+                    transform: rotate(45deg);
+                }
+            }
+        }
+        .vertLine {
+            width: 1px;
+            height: 618px;
+            background: #F0F0F0;
+            border-radius: 1px;
         }
     }
 }
