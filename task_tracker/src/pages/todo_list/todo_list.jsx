@@ -84,7 +84,14 @@ class TodoListPage extends Component {
                             </h2>
                         </div>
                     </div>
-                    <div className="vertLine"/>
+
+                    <div className="rightTable">
+                        <div>
+                            <h3>Имя</h3>
+                            <h3>Изменен</h3>
+                            <h3>Статус</h3>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
