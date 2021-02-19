@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 $ff: Inter;
-$arState: -1; 
 
 button {
     cursor: pointer;
@@ -9,6 +8,15 @@ button {
 
 * {
     outline: none !important;
+}
+
+@mixin noSelect{
+    -webkit-touch-callout: none; 
+    -webkit-user-select: none;
+    -khtml-user-select: none;  
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .todoPage{
@@ -23,7 +31,7 @@ button {
         box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
         background-color: rgba(0, 0, 0, 0.02);
     }
-    .sArrow {
+    @mixin sArrow {
         width: 7px;
         height: 7px;
         border-top: 1.5px solid #0047FF;
@@ -32,6 +40,14 @@ button {
         margin-right: 5px;
         margin-bottom: 3px;
         display: inline-block;
+    }
+    .sArrowD {
+        @include sArrow();
+        transform: rotate(135deg);
+    }
+    .sArrowU {
+        @include sArrow();
+        transform: rotate(45deg);
     }
     header {    
         .headCont{
@@ -58,9 +74,7 @@ button {
                 font-weight: normal;
                 font-size: 18px;
                 color: #0047FF;
-                .sArrow {
-                    transform: rotate(135deg);
-                }
+                @include noSelect();
             }
             button {
                 background: white;
@@ -89,6 +103,7 @@ button {
         h2 {
             font-weight: 500;
             font-size: 18px;
+            user-select: none;
         }
         display: flex;
         flex-direction: row;
@@ -101,9 +116,6 @@ button {
             border-color: #F0F0F0;
             border-right: 1px;
             .titleFilt {
-                .sArrow {
-                    transform: rotate(135deg);
-                }
                 .titleInp {
                     width: 300px;
                     height: 50px;
@@ -112,17 +124,19 @@ button {
                     border-radius: 6px;
                     * {
                         display: inline-block;
+                        vertical-align: middle;
                     }
                     .loupe {
                         width: 16px;
-                        height: 16px;
+                        margin-top: 12px;
+                        height: 17px;
                         background: url("../../icons/loupe.png") center no-repeat;
                         background-size: cover;
                         margin-left: 10px;
                         margin-right: 10px;
                     }
-                    input{
-                        margin-top: 12px;
+                    input {
+                        margin-top: 13px;
                         height: 18px;
                         font-weight: normal;
                         font-size: 16px;
@@ -132,9 +146,6 @@ button {
                 }
             }
             .periodFilt {
-                .sArrow {
-                    transform: rotate(135deg);
-                }
                 .perInp {
                     display: inline-block;
                     margin-right: 5px;
@@ -158,9 +169,6 @@ button {
                 }
             }
             .sortFilt {
-                .sArrow {
-                    transform: rotate(135deg);
-                }
                 .radioSort {
                     div {
                         margin-bottom: 10px;
@@ -169,16 +177,6 @@ button {
                         font-weight: normal;
                         font-size: 16px;
                     }
-                }
-            }
-            .showFilt {
-                .sArrow {
-                    transform: rotate(45deg);
-                }
-            }
-            .infoFilt {
-                .sArrow {
-                    transform: rotate(45deg);
                 }
             }
         }
