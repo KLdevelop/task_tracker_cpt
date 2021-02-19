@@ -43,11 +43,11 @@ button {
     }
     .sArrowD {
         @include sArrow();
-        transform: rotate(135deg);
+        transform: rotate(45deg);
     }
     .sArrowU {
         @include sArrow();
-        transform: rotate(45deg);
+        transform: rotate(135deg);
     }
     header {    
         .headCont{
