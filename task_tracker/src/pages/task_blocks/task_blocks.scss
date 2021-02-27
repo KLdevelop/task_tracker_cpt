@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+$ff: Inter;
+
+button {
+    cursor: pointer;
+}
+
+* {
+    outline: none !important;
+}
+
+@mixin noSelect{
+    -webkit-touch-callout: none; 
+    -webkit-user-select: none;
+    -khtml-user-select: none;  
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.blocksPage {
+    zoom: 0.85;
+    * {
+        font-family: $ff;
+    }
+    .bttn:hover{
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+    .bttn:active {
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+    header {    
+        .headCont{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-left: auto;
+            margin-right: auto;
+            height: 110px;
+            width: 1247px;
+            *{
+                display: inline-block;
+            }
+            h1 {
+                font-weight: 600;
+                font-size: 32px;
+                color: #FF7A00;
+                span {
+                    color: black;
+                }
+            }
+            h2 {
+                margin-right: 15px;
+                font-weight: normal;
+                font-size: 18px;
+                color: #0047FF;
+                @include noSelect();
+            }
+            button {
+                background: white;
+                border: 2px solid #0047FF;
+                box-sizing: border-box;
+                border-radius: 8px;
+                color: #0047FF;
+                width: 203px;
+                height: 56px;
+                font-weight: 500;
+                font-size: 18px;
+            }
+            h3 {
+                font-weight: 500;
+                font-size: 18px;
+            }
+            @mixin sArrow {
+                width: 7px;
+                height: 7px;
+                border-top: 1.5px solid #0047FF;
+                border-right: 1.5px solid #0047FF;
+                margin-left: -5px;
+                margin-right: 5px;
+                margin-bottom: 3px;
+                display: inline-block;
+            }
+            .sArrowD {
+                @include sArrow();
+                transform: rotate(45deg);
+            }
+            .sArrowU {
+                @include sArrow();
+                transform: rotate(135deg);
+            }
+        }
+    }
+}

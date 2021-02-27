@@ -134,34 +134,6 @@ class TodoListPage extends Component {
                                 </div>
                             </> }
                         </div>
-                        <div className="sortFilt">
-                            <h2 onClick={ this.onSortClick }>
-                                <>
-                                    <div className={ "sArrow" + (arrStateSort ? "U" : "D") }/>
-                                    Сортировать по
-                                </>
-                            </h2>
-                            { arrStateSort && <div className="radioSort">
-                                <div>
-                                    <input id="createTimeF" type="radio" name="sort" value="createtime"
-                                        checked={ sortChecked == 'createtime' }
-                                        onChange={ this.onRadioChange }/>
-                                    <label htmlFor="createTimeF">Времени создания</label>
-                                </div>
-                                <div>
-                                    <input id="nameF" type="radio" name="sort" value="name"
-                                        checked={ sortChecked == 'name' }
-                                        onChange={ this.onRadioChange }/>
-                                    <label htmlFor="nameF">Имени</label>
-                                </div>
-                                <div>
-                                    <input id="statusF" type="radio" name="sort" value="status"
-                                        checked={ sortChecked == 'status' }
-                                        onChange={ this.onRadioChange }/>
-                                    <label htmlFor="statusF">Статусу</label>
-                                </div>
-                            </div> }
-                        </div>
                         <div className="showFilt">
                             <h2 onClick={ this.onShowClick }>
                                 <>
