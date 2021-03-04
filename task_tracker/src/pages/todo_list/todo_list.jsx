@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import './todo_list.scss';
 
 class TodoListPage extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     state = {
         titleFilt: '',
         sortChecked: 'createtime',
@@ -83,6 +87,10 @@ class TodoListPage extends Component {
         });
     };
 
+    onNewTaskClick = () => {
+        this.props.history.push('/taskblocks');
+    };
+
     render() {
         const { tasks, sortChecked, titleFilt, arrStateInfo, arrStatePeriod, arrStateLogin, arrStateShow,
             arrStateTitle, arrStateSort } = this.state;
@@ -98,7 +106,7 @@ class TodoListPage extends Component {
                                     Login
                                 </>
                             </h2>
-                            <button className="bttn">Создать задачу</button>
+                            <button className="bttn" onClick={ this.onNewTaskClick }>Создать задачу</button>
                         </div>
                     </div>
                 </header>
