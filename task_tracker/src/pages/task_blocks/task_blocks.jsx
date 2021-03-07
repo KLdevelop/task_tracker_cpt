@@ -35,10 +35,15 @@ class BlocksPage extends Component {
     };
 
     onBlockDown = (id, e) => {
+        let dx = e.clientX - e.target.offsetLeft;
+        let dy = e.clientY - e.target.offsetTop;
+        //Не забыть поменять потом на другие ширину и высоту
+        if (dx > 200) dx = 100;
+        if (dy > 80) dy = 40;
         this.setState({
             onMoveBlock: true,
-            dx: e.clientX - e.target.offsetLeft,
-            dy: e.clientY - e.target.offsetTop,
+            dx,
+            dy,
             selBlockId: id
         });
     };
@@ -58,31 +63,18 @@ class BlocksPage extends Component {
         }
     };
 
-    onBlockOut = (id, e) => {
-        const { blocks, onMoveBlock, dx, dy } = this.state;
-        const deltaX = e.clientX - dx;
-        const deltaY = e.clientY - dy;
-        if (onMoveBlock && deltaX > 0 && deltaY > 110) {
-            blocks[id].styles = {
-                top: deltaY + "px",
-                left: deltaX + "px"
-            };
-            this.setState({
-                blocks
-            });
-        }
-    };
-
     onBlockUp = () => {
         this.setState({
-            onMoveBlock: false
+            onMoveBlock: false,
+            dx: 0,
+            dy: 0
         });
     };
 
     render() {
         const { title, arrStateLogin, blocks } = this.state;
         return (
-            <div className="blocksPage">
+            <div className="blocksPage" onMouseUp={ this.onBlockUp }>
                 <header>
                     <div className="headCont">
                         <h1>Task<span>Tracker</span></h1>
@@ -102,13 +94,11 @@ class BlocksPage extends Component {
                         </div>
                     </div>
                 </header>
-                <div className="blocksCont" onMouseMove={ (e) => this.onBlockMove(e) } onMouseUp={ this.onBlockUp }>
+                <div className="blocksCont" onMouseMove={ (e) => this.onBlockMove(e) }>
                     {
                         blocks.map((block, id) => 
                             <div key={ id }
                                 onMouseDown={ (e) => this.onBlockDown(id, e) }
-                                onMouseOut={ (e) => this.onBlockOut(id, e) }
-                                onMouseUp={ this.onBlockUp }
                                 style={ block.styles }
                             >
                                 <h3>{ block.title }</h3>
