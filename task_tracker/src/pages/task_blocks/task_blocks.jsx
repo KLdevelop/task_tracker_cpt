@@ -8,7 +8,8 @@ class BlocksPage extends Component {
         blocks: [],
         onMoveBlock: false,
         dx: 0,
-        dy: 0
+        dy: 0,
+        selBlockId: 0
     };
 
     onLoginClick = () => {
@@ -33,20 +34,21 @@ class BlocksPage extends Component {
         });
     };
 
-    onBlockDown = (e) => {
+    onBlockDown = (id, e) => {
         this.setState({
             onMoveBlock: true,
             dx: e.clientX - e.target.offsetLeft,
-            dy: e.clientY - e.target.offsetTop
+            dy: e.clientY - e.target.offsetTop,
+            selBlockId: id
         });
     };
 
-    onBlockMove = (id, e) => {
-        const { blocks, onMoveBlock, dx, dy } = this.state;
+    onBlockMove = (e) => {
+        const { blocks, onMoveBlock, dx, dy, selBlockId } = this.state;
         const deltaX = e.clientX - dx;
         const deltaY = e.clientY - dy;
-        if (onMoveBlock && deltaX >= 0 && deltaY >= 110) {
-            blocks[id].styles = {
+        if (onMoveBlock && deltaX > 0 && deltaY > 110) {
+            blocks[selBlockId].styles = {
                 top: deltaY + "px",
                 left: deltaX + "px"
             };
@@ -57,16 +59,18 @@ class BlocksPage extends Component {
     };
 
     onBlockOut = (id, e) => {
-        const { blocks, dx, dy } = this.state;
+        const { blocks, onMoveBlock, dx, dy } = this.state;
         const deltaX = e.clientX - dx;
         const deltaY = e.clientY - dy;
-        blocks[id].styles = {
-            top: deltaY + "px",
-            left: deltaX + "px"
-        };
-        this.setState({
-            blocks
-        });
+        if (onMoveBlock && deltaX > 0 && deltaY > 110) {
+            blocks[id].styles = {
+                top: deltaY + "px",
+                left: deltaX + "px"
+            };
+            this.setState({
+                blocks
+            });
+        }
     };
 
     onBlockUp = () => {
@@ -98,12 +102,12 @@ class BlocksPage extends Component {
                         </div>
                     </div>
                 </header>
-                <div className="blocksCont">
+                <div className="blocksCont" onMouseMove={ (e) => this.onBlockMove(e) } onMouseUp={ this.onBlockUp }>
                     {
                         blocks.map((block, id) => 
                             <div key={ id }
-                                onMouseDown={ this.onBlockDown }
-                                onMouseMove={ (e) => this.onBlockMove(id, e) }
+                                onMouseDown={ (e) => this.onBlockDown(id, e) }
+                                onMouseOut={ (e) => this.onBlockOut(id, e) }
                                 onMouseUp={ this.onBlockUp }
                                 style={ block.styles }
                             >
