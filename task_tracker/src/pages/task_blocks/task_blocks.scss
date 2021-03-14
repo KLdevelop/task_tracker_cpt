@@ -23,7 +23,7 @@ button {
     * {
         @include noSelect();
     }
-    zoom: 0.85;
+    //zoom: 0.85;
     * {
         font-family: $ff;
     }
@@ -35,7 +35,6 @@ button {
         background-color: rgba(0, 0, 0, 0.02);
     }
     header {
-        z-index: 9999999;
         box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.05);
         background: #FFFFFF;
         height: 110px;
@@ -101,9 +100,9 @@ button {
         }
     }
     .blocksCont {
-        z-index: 0;
+        height: calc(100vh - 110px);
         div {
-            z-index: -1;
+            background: wheat;
             width: 200px;
             height: 80px;
             border: 1px solid black;

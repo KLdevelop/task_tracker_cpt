@@ -222,10 +222,10 @@ class TodoListPage extends Component {
                         </div>
                         <hr/>
                         {
-                            tasks.map((task) => {
+                            tasks.map((task, id) => {
                                 return (
                                     <>
-                                        <div>
+                                        <div key={ id }>
                                             <h3>{ task.name }</h3>
                                             <h3 className="greyH">{ task.changed }</h3>
                                             <h3>
