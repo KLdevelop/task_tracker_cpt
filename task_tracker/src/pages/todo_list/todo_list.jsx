@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Modal from 'react-modal';
 import './todo_list.scss';
 
 class TodoListPage extends Component {
@@ -6,9 +7,12 @@ class TodoListPage extends Component {
         super(props);
     }
 
+    componentDidMount() {
+        Modal.setAppElement("#tPage");
+    }
+
     state = {
         titleFilt: '',
-        sortChecked: 'createtime',
         periodStart: 'дд.мм.гггг',
         periodEnd: 'дд.мм.гггг',
         tasks: [
@@ -28,9 +32,10 @@ class TodoListPage extends Component {
         arrStateLogin: true,
         arrStateTitle: true,
         arrStatePeriod: true,
-        arrStateSort: true,
         arrStateShow: false,
-        arrStateInfo: false
+        arrStateInfo: false,
+        newTask: false,
+        taskName: ''
     };
 
     onRadioChange = (e) => {
@@ -88,14 +93,62 @@ class TodoListPage extends Component {
     };
 
     onNewTaskClick = () => {
-        this.props.history.push('/taskblocks');
+        //this.props.history.push('/taskblocks');
+        const { newTask } = this.state;
+        this.setState({
+            newTask: !newTask
+        });
+    };
+    
+    onTaskNameChange = (e) => {
+        this.setState({
+            taskName: e.target.value
+        });
     };
 
+    onAddTaskClick = () => {
+        let { taskName, tasks } = this.state;
+        const date = new Date();
+        let month = date.getMonth();
+        if (+month + 1 < 10) month = '0' + (+month + 1);
+        else month = +month + 1;
+        let day = date.getDate();
+        if (+day < 10) day = '0' + day;
+        tasks.push({
+            name: taskName,
+            changed: `${day}.${month}.${date.getFullYear()}`,
+            status: '',
+            percent: '0%'
+        });
+        this.setState({
+            tasks: tasks,
+            taskName: '',
+            newTask: false
+        });
+    }
+
+    onRedactClick = () => {
+        this.props.history.push('/taskblocks');
+    }
+
     render() {
-        const { tasks, sortChecked, titleFilt, arrStateInfo, arrStatePeriod, arrStateLogin, arrStateShow,
-            arrStateTitle, arrStateSort } = this.state;
+        const { tasks, titleFilt, arrStateInfo, arrStatePeriod, arrStateLogin, arrStateShow,
+            arrStateTitle, newTask, taskName } = this.state;
         return(
-            <div className="todoPage">
+            <>
+            <Modal className="modalTask" isOpen={ newTask } onRequestClose={ this.onNewTaskClick }
+                overlayClassName="overlayModal">
+                <div className="modalCont">
+                    <h1>Название задачи</h1>
+                    <div>
+                        <input onChange={ this.onTaskNameChange } value={ taskName }/>
+                    </div>
+                    <button className="bttn" onClick={ this.onAddTaskClick }>
+                        Создать
+                    </button>
+                </div>
+            </Modal>
+            <div className="todoPage" id="tPage">
                 <header>
                     <div className="headCont">
                         <h1>Task<span>Tracker</span></h1>
@@ -181,7 +234,9 @@ class TodoListPage extends Component {
                                                     { task.percent != '100%' ? ` ${ task.percent }` : '' }
                                                 </span>
                                             </h3>
-                                            <h3 className="blueH">Редактировать</h3>
+                                            <h3 id="redact" className="blueH" onClick={ this.onRedactClick }>
+                                                Редактировать
+                                            </h3>
                                         </div>
                                         <hr/>
                                     </>
@@ -191,6 +246,7 @@ class TodoListPage extends Component {
                     </div>
                 </div>
             </div>
+            </>
         );
     }
 }
