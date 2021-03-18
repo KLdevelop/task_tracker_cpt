@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Xarrow from 'react-xarrows';
 import './task_blocks.scss';
 
 class BlocksPage extends Component {
@@ -9,7 +10,10 @@ class BlocksPage extends Component {
         onMoveBlock: false,
         dx: 0,
         dy: 0,
-        selBlockId: 0
+        selBlockId: 0,
+        drawArrow: false,
+        fromBlock: '',
+        arrows: []
     };
 
     onLoginClick = () => {
@@ -27,7 +31,8 @@ class BlocksPage extends Component {
             styles: {
                 top: '150px',
                 left: '50px'
-            }
+            },
+            isSelected: false
         });
         this.setState({
             blocks
@@ -71,8 +76,57 @@ class BlocksPage extends Component {
         });
     };
 
+    onDrawArrowClick = () => {
+        let { drawArrow, blocks } = this.state;
+        if (drawArrow) {
+            blocks = blocks.map((block) => {
+                block.isSelected = false;
+                return block;
+            });
+            this.setState({
+                blocks
+            });
+        }
+        this.setState({
+            drawArrow: !drawArrow
+        });
+    };
+
+    onBlockClick = (id) => {
+        const { drawArrow, fromBlock, arrows, blocks } = this.state;
+        if (drawArrow) {
+            if (fromBlock != '' && id != fromBlock) {
+                arrows.push({
+                    start: fromBlock,
+                    end: id
+                });
+                blocks[+fromBlock.replace('block', '')].isSelected = false;
+                this.setState({
+                    arrows,
+                    fromBlock: '',
+                    blocks
+                });
+            }
+            else if (id == fromBlock) {
+                blocks[+fromBlock.replace('block', '')].isSelected = false;
+                this.setState({
+                    blocks,
+                    fromBlock: ''
+                });
+            }
+            else {
+                console.log(+id.replace('block', ''));
+                blocks[+id.replace('block', '')].isSelected = true;
+                this.setState({
+                    fromBlock: id,
+                    blocks
+                });
+            }
+        }
+    };
+
     render() {
-        const { title, arrStateLogin, blocks } = this.state;
+        const { title, arrStateLogin, blocks, arrows, drawArrow } = this.state;
         return (
             <div className="blocksPage" onMouseUp={ this.onBlockUp }>
                 <header>
@@ -91,21 +145,30 @@ class BlocksPage extends Component {
                             >
                                 Добавить блок
                             </button>
+                            <button onClick={ this.onDrawArrowClick } 
+                                className={ drawArrow ? "activeDrawArrow" : "drawArrow"}
+                            >
+                                Изменить
+                            </button>
                         </div>
                     </div>
                 </header>
                 <div className="blocksCont" onMouseMove={ (e) => this.onBlockMove(e) }>
-                    {
-                        blocks.map((block, id) => 
-                            <div key={ id }
+                    <>
+                        { blocks.map((block, id) => 
+                            <div key={ `block${ id }` }
+                                id={ `block${ id }` }
+                                className={ blocks[id].isSelected ? "blockSel" : "block"}
+                                onClick={ () => this.onBlockClick(`block${ id }`) }
                                 onMouseDown={ (e) => this.onBlockDown(id, e) }
                                 style={ block.styles }
                             >
                                 <h3>{ block.title }</h3>
                                 <p>{ block.status }</p>
                             </div>
-                        )
-                    }
+                        ) }
+                        { arrows.map((arrow, id) => <Xarrow key={ `arrow${ id }` } start={ arrow.start } end={ arrow.end }/>) }
+                    </>
                 </div>
             </div>
         );

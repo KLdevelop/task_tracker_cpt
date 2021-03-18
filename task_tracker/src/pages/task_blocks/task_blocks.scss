@@ -75,6 +75,14 @@ button {
                 font-weight: 500;
                 font-size: 18px;
             }
+            .drawArrow, .activeDrawArrow {
+                width: 120px;
+                margin-left: 15px;
+            }
+            .activeDrawArrow {
+                background-color: #317bcf;
+                color: #e8efff;
+            }
             h3 {
                 font-weight: 500;
                 font-size: 18px;
@@ -101,7 +109,7 @@ button {
     }
     .blocksCont {
         height: calc(100vh - 110px);
-        div {
+        .block, .blockSel {
             background: wheat;
             width: 200px;
             height: 80px;
@@ -109,6 +117,9 @@ button {
             position: absolute;
             border-radius: 24px;
             text-align: center;
+        }
+        .block:hover, .blockSel {
+            border: 2px solid #0047FF;
         }
     }
 }
