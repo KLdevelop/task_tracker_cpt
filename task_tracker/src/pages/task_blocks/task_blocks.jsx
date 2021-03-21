@@ -16,6 +16,16 @@ class BlocksPage extends Component {
         arrows: []
     };
 
+    getRandomInt = (max) => {
+        return Math.floor(Math.random() * (max + 1));
+    }
+
+    getRandomColor = () => {
+        const colors = ['#19191A', '#A5F469', '#005FF9', '#FF7A00', '#DF15A6'];
+        return colors[this.getRandomInt(4)];
+    }
+      
+
     onLoginClick = () => {
         const { arrStateLogin } = this.state;
         this.setState({
@@ -30,7 +40,8 @@ class BlocksPage extends Component {
             status,
             styles: {
                 top: '150px',
-                left: '50px'
+                left: '50px',
+                background: this.getRandomColor()
             },
             isSelected: false
         });
@@ -42,9 +53,9 @@ class BlocksPage extends Component {
     onBlockDown = (id, e) => {
         let dx = e.clientX - e.target.offsetLeft;
         let dy = e.clientY - e.target.offsetTop;
-        //Не забыть поменять потом на другие ширину и высоту
-        if (dx > 200) dx = 100;
-        if (dy > 80) dy = 40;
+        const [width, height] = [e.target.offsetWidth, e.target.offsetHeight];
+        if (dx > width) dx = Math.floor(width / 2);
+        if (dy > height) dy = Math.floor(height / 2);
         this.setState({
             onMoveBlock: true,
             dx,
@@ -57,10 +68,11 @@ class BlocksPage extends Component {
         const { blocks, onMoveBlock, dx, dy, selBlockId } = this.state;
         const deltaX = e.clientX - dx;
         const deltaY = e.clientY - dy;
-        if (onMoveBlock && deltaX > 0 && deltaY > 110) {
+        if (onMoveBlock && deltaX >= 0 && deltaY > 110) {
             blocks[selBlockId].styles = {
                 top: deltaY + "px",
-                left: deltaX + "px"
+                left: deltaX + "px",
+                background: blocks[selBlockId].styles.background
             };
             this.setState({
                 blocks
@@ -115,7 +127,6 @@ class BlocksPage extends Component {
                 });
             }
             else {
-                console.log(+id.replace('block', ''));
                 blocks[+id.replace('block', '')].isSelected = true;
                 this.setState({
                     fromBlock: id,
@@ -167,7 +178,12 @@ class BlocksPage extends Component {
                                 <p>{ block.status }</p>
                             </div>
                         ) }
-                        { arrows.map((arrow, id) => <Xarrow key={ `arrow${ id }` } start={ arrow.start } end={ arrow.end }/>) }
+                        { arrows.map((arrow, id) => <Xarrow key={ `arrow${ id }` } 
+                            start={ arrow.start } 
+                            end={ arrow.end }
+                            color="black"
+                            strokeWidth={2}
+                        />) }
                     </>
                 </div>
             </div>

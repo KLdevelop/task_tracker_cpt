@@ -110,13 +110,14 @@ button {
     .blocksCont {
         height: calc(100vh - 110px);
         .block, .blockSel {
-            background: wheat;
-            width: 200px;
-            height: 80px;
-            border: 1px solid black;
+            //background: wheat;
+            min-width: 200px;
+            //height: 80px;
+            //border: 1px solid black;
             position: absolute;
             border-radius: 24px;
             text-align: center;
+            color: white;
         }
         .block:hover, .blockSel {
             border: 2px solid #0047FF;
