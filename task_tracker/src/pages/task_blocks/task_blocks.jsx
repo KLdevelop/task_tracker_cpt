@@ -10,11 +10,47 @@ class BlocksPage extends Component {
         onMoveBlock: false,
         dx: 0,
         dy: 0,
-        selBlockId: 0,
+        selBlockId: null,
         drawArrow: false,
         fromBlock: '',
         arrows: []
     };
+
+    onDelClick = () => {
+        const { selBlockId, blocks, arrows } = this.state;
+        if (selBlockId != null) {
+            blocks[selBlockId].arrowIDs.map(a => {
+                if (arrows[a]) { 
+                    const start = +arrows[a].start.replace('block', '');
+                    const end = +arrows[a].end.replace('block', '');
+                    if (selBlockId != start) blocks[start].arrowIDs.splice(blocks[start].arrowIDs.indexOf(a), 1);
+                    else blocks[end].arrowIDs.splice(blocks[end].arrowIDs.indexOf(a), 1);
+                    delete arrows[a]; 
+                }
+            });
+            delete blocks[selBlockId];
+            this.setState({
+                selBlockId: null,
+                blocks,
+                arrows,
+                fromBlock: ''
+            });
+        }
+    };
+
+    handleKeyDown = (e) => {
+        switch(e.keyCode) {
+            case 46:
+                this.onDelClick();
+                break;
+            default:
+                break;
+        }
+    };
+
+    componentDidMount() {
+        document.addEventListener('keydown', this.handleKeyDown);
+    }
 
     getRandomInt = (max) => {
         return Math.floor(Math.random() * (max + 1));
@@ -43,7 +79,8 @@ class BlocksPage extends Component {
                 left: '50px',
                 background: this.getRandomColor()
             },
-            isSelected: false
+            isSelected: false,
+            arrowIDs: []
         });
         this.setState({
             blocks
@@ -65,10 +102,10 @@ class BlocksPage extends Component {
     };
 
     onBlockMove = (e) => {
-        const { blocks, onMoveBlock, dx, dy, selBlockId } = this.state;
+        const { blocks, onMoveBlock, dx, dy, selBlockId, drawArrow } = this.state;
         const deltaX = e.clientX - dx;
         const deltaY = e.clientY - dy;
-        if (onMoveBlock && deltaX >= 0 && deltaY > 110) {
+        if (drawArrow && onMoveBlock && deltaX >= 0 && deltaY > 110) {
             blocks[selBlockId].styles = {
                 top: deltaY + "px",
                 left: deltaX + "px",
@@ -96,7 +133,8 @@ class BlocksPage extends Component {
                 return block;
             });
             this.setState({
-                blocks
+                blocks,
+                selBlockId: null
             });
         }
         this.setState({
@@ -108,14 +146,17 @@ class BlocksPage extends Component {
         const { drawArrow, fromBlock, arrows, blocks } = this.state;
         if (drawArrow) {
             if (fromBlock != '' && id != fromBlock) {
+                blocks[+fromBlock.replace('block', '')].isSelected = false;
+                blocks[+fromBlock.replace('block', '')].arrowIDs.push(arrows.length);
+                blocks[+id.replace('block', '')].arrowIDs.push(arrows.length);
                 arrows.push({
                     start: fromBlock,
                     end: id
                 });
-                blocks[+fromBlock.replace('block', '')].isSelected = false;
                 this.setState({
                     arrows,
                     fromBlock: '',
+                    selBlockId: null,
                     blocks
                 });
             }
@@ -123,13 +164,15 @@ class BlocksPage extends Component {
                 blocks[+fromBlock.replace('block', '')].isSelected = false;
                 this.setState({
                     blocks,
-                    fromBlock: ''
+                    fromBlock: '',
+                    selBlockId: null
                 });
             }
             else {
                 blocks[+id.replace('block', '')].isSelected = true;
                 this.setState({
                     fromBlock: id,
+                    selBlockId: +id.replace('block', ''),
                     blocks
                 });
             }
@@ -151,11 +194,11 @@ class BlocksPage extends Component {
                                     Login
                                 </>
                             </h2>
-                            <button className="bttn" 
+                            { drawArrow && <button className="bttn" 
                                 onClick={ () => this.onNewBlockClick('Блок', '10%') }
                             >
                                 Добавить блок
-                            </button>
+                            </button> }
                             <button onClick={ this.onDrawArrowClick } 
                                 className={ drawArrow ? "activeDrawArrow" : "drawArrow"}
                             >
@@ -167,7 +210,7 @@ class BlocksPage extends Component {
                 <div className="blocksCont" onMouseMove={ (e) => this.onBlockMove(e) }>
                     <>
                         { blocks.map((block, id) => 
-                            <div key={ `block${ id }` }
+                            block && <div key={ `block${ id }` }
                                 id={ `block${ id }` }
                                 className={ blocks[id].isSelected ? "blockSel" : "block"}
                                 onClick={ () => this.onBlockClick(`block${ id }`) }
@@ -176,9 +219,9 @@ class BlocksPage extends Component {
                             >
                                 <h3>{ block.title }</h3>
                                 <p>{ block.status }</p>
-                            </div>
+                            </div> 
                         ) }
-                        { arrows.map((arrow, id) => <Xarrow key={ `arrow${ id }` } 
+                        { arrows.map((arrow, id) => arrow && <Xarrow key={ `arrow${ id }` } 
                             start={ arrow.start } 
                             end={ arrow.end }
                             color="black"
