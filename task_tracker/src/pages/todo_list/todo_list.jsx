@@ -55,6 +55,7 @@ class TodoListPage extends Component {
         this.setState({
             arrStateLogin: !arrStateLogin
         });
+        this.props.history.push('/authorization');
     };
 
     onTitleClick = () => {
@@ -93,7 +94,6 @@ class TodoListPage extends Component {
     };
 
     onNewTaskClick = () => {
-        //this.props.history.push('/taskblocks');
         const { newTask } = this.state;
         this.setState({
             newTask: !newTask

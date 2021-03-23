@@ -3,6 +3,10 @@ import Xarrow from 'react-xarrows';
 import './task_blocks.scss';
 
 class BlocksPage extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     state = {
         arrStateLogin: true,
         title: "Задача",
@@ -67,6 +71,7 @@ class BlocksPage extends Component {
         this.setState({
             arrStateLogin: !arrStateLogin
         });
+        this.props.history.push('/authorization');
     };
 
     onNewBlockClick = (title, status) => {
