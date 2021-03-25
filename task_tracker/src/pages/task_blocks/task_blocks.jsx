@@ -17,29 +17,48 @@ class BlocksPage extends Component {
         selBlockId: null,
         drawArrow: false,
         fromBlock: '',
-        arrows: []
+        arrows: [],
+        selArrowID: null
+    };
+
+    blockDel = () => {
+        const { selBlockId, blocks, arrows } = this.state;
+        blocks[selBlockId].arrowIDs.map(a => {
+            if (arrows[a]) { 
+                const start = +arrows[a].start.replace('block', '');
+                const end = +arrows[a].end.replace('block', '');
+                if (selBlockId != start) blocks[start].arrowIDs.splice(blocks[start].arrowIDs.indexOf(a), 1);
+                else blocks[end].arrowIDs.splice(blocks[end].arrowIDs.indexOf(a), 1);
+                delete arrows[a]; 
+            }
+        });
+        delete blocks[selBlockId];
+        this.setState({
+            selBlockId: null,
+            blocks,
+            arrows,
+            fromBlock: ''
+        });
+    };
+
+    arrowDel = () => {
+        const { selArrowID, blocks, arrows } = this.state;
+        const start = +arrows[selArrowID].start.replace('block', '');
+        const end = +arrows[selArrowID].end.replace('block', '');
+        blocks[start].arrowIDs.splice(blocks[start].arrowIDs.indexOf(selArrowID), 1);
+        blocks[end].arrowIDs.splice(blocks[end].arrowIDs.indexOf(selArrowID), 1);
+        delete arrows[selArrowID];
+        this.setState({
+            selArrowID: null,
+            blocks,
+            arrows
+        });
     };
 
     onDelClick = () => {
-        const { selBlockId, blocks, arrows } = this.state;
-        if (selBlockId != null) {
-            blocks[selBlockId].arrowIDs.map(a => {
-                if (arrows[a]) { 
-                    const start = +arrows[a].start.replace('block', '');
-                    const end = +arrows[a].end.replace('block', '');
-                    if (selBlockId != start) blocks[start].arrowIDs.splice(blocks[start].arrowIDs.indexOf(a), 1);
-                    else blocks[end].arrowIDs.splice(blocks[end].arrowIDs.indexOf(a), 1);
-                    delete arrows[a]; 
-                }
-            });
-            delete blocks[selBlockId];
-            this.setState({
-                selBlockId: null,
-                blocks,
-                arrows,
-                fromBlock: ''
-            });
-        }
+        const { selBlockId, selArrowID } = this.state;
+        if (selBlockId !== null) this.blockDel();
+        if (selArrowID !== null) this.arrowDel();
     };
 
     handleKeyDown = (e) => {
@@ -61,7 +80,7 @@ class BlocksPage extends Component {
     }
 
     getRandomColor = () => {
-        const colors = ['#19191A', '#A5F469', '#005FF9', '#FF7A00', '#DF15A6'];
+        const colors = ['#19191A', '#A5F469', '#13B2C7', '#FF7A00', '#DF15A6'];
         return colors[this.getRandomInt(4)];
     }
       
@@ -74,6 +93,10 @@ class BlocksPage extends Component {
         this.props.history.push('/authorization');
     };
 
+    onLogoClick = () => {
+        this.props.history.push('/');
+    };
+
     onNewBlockClick = (title, status) => {
         let { blocks } = this.state;
         blocks.push({
@@ -84,7 +107,6 @@ class BlocksPage extends Component {
                 left: '50px',
                 background: this.getRandomColor()
             },
-            isSelected: false,
             arrowIDs: []
         });
         this.setState({
@@ -131,19 +153,12 @@ class BlocksPage extends Component {
     };
 
     onDrawArrowClick = () => {
-        let { drawArrow, blocks } = this.state;
-        if (drawArrow) {
-            blocks = blocks.map((block) => {
-                block.isSelected = false;
-                return block;
-            });
-            this.setState({
-                blocks,
-                selBlockId: null
-            });
-        }
+        let { drawArrow } = this.state;
         this.setState({
-            drawArrow: !drawArrow
+            drawArrow: !drawArrow,
+            selBlockId: null,
+            selArrowID: null,
+            fromBlock: ''
         });
     };
 
@@ -151,7 +166,6 @@ class BlocksPage extends Component {
         const { drawArrow, fromBlock, arrows, blocks } = this.state;
         if (drawArrow) {
             if (fromBlock != '' && id != fromBlock) {
-                blocks[+fromBlock.replace('block', '')].isSelected = false;
                 blocks[+fromBlock.replace('block', '')].arrowIDs.push(arrows.length);
                 blocks[+id.replace('block', '')].arrowIDs.push(arrows.length);
                 arrows.push({
@@ -166,31 +180,37 @@ class BlocksPage extends Component {
                 });
             }
             else if (id == fromBlock) {
-                blocks[+fromBlock.replace('block', '')].isSelected = false;
                 this.setState({
-                    blocks,
                     fromBlock: '',
                     selBlockId: null
                 });
             }
             else {
-                blocks[+id.replace('block', '')].isSelected = true;
                 this.setState({
                     fromBlock: id,
                     selBlockId: +id.replace('block', ''),
-                    blocks
+                    selArrowID: null
                 });
             }
         }
     };
 
+    onArrowClick = (id) => {
+        const { selArrowID, drawArrow } = this.state;
+        if (drawArrow) this.setState({
+            selArrowID: id === selArrowID ? null : id,
+            selBlockId: null,
+            fromBlock: ''
+        });
+    };
+
     render() {
-        const { title, arrStateLogin, blocks, arrows, drawArrow } = this.state;
+        const { title, arrStateLogin, blocks, arrows, drawArrow, selArrowID, selBlockId } = this.state;
         return (
             <div className="blocksPage" onMouseUp={ this.onBlockUp }>
                 <header>
                     <div className="headCont">
-                        <h1>Task<span>Tracker</span></h1>
+                        <h1 onClick={ this.onLogoClick } className="logo">Task<span>Tracker</span></h1>
                         <h3>{ title }</h3>
                         <div>
                             <h2 onClick={ this.onLoginClick }>
@@ -217,7 +237,7 @@ class BlocksPage extends Component {
                         { blocks.map((block, id) => 
                             block && <div key={ `block${ id }` }
                                 id={ `block${ id }` }
-                                className={ blocks[id].isSelected ? "blockSel" : "block"}
+                                className={ selBlockId === id ? "blockSel" : "block"}
                                 onClick={ () => this.onBlockClick(`block${ id }`) }
                                 onMouseDown={ (e) => this.onBlockDown(id, e) }
                                 style={ block.styles }
@@ -229,8 +249,9 @@ class BlocksPage extends Component {
                         { arrows.map((arrow, id) => arrow && <Xarrow key={ `arrow${ id }` } 
                             start={ arrow.start } 
                             end={ arrow.end }
-                            color="black"
+                            color={selArrowID === id ? "blue" :"black"}
                             strokeWidth={2}
+                            onClick={ () => this.onArrowClick(id) }
                         />) }
                     </>
                 </div>
