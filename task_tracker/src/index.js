@@ -11,11 +11,11 @@ import { BrowserRouter, Route } from 'react-router-dom';
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Route exact path="/" component={ TodoListPage }/>
-      <Route path="/authorization" component={ AuthPage }/>
-      <Route path="/registration" component={ RegistrPage }/>
-      <Route path="/todolist" component={ TodoListPage }/>
-      <Route path="/taskblocks" component={ BlocksPage }/>
+      <Route exact path="/" component={ TodoListPage } key={ 0 }/>
+      <Route path="/authorization" component={ AuthPage } key={ 1 }/>
+      <Route path="/registration" component={ RegistrPage } key={ 2 }/>
+      <Route path="/todolist" component={ TodoListPage } key={ 3 }/>
+      <Route path="/taskblocks" component={ BlocksPage }key={ 4 }/>
     </BrowserRouter >
   </React.StrictMode>,
   document.getElementById('root')
