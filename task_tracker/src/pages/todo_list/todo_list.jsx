@@ -9,6 +9,7 @@ class TodoListPage extends Component {
 
     componentDidMount() {
         Modal.setAppElement("#tPage");
+        this.sortByName(false);
     }
 
     state = {
@@ -17,16 +18,18 @@ class TodoListPage extends Component {
         periodEnd: 'дд.мм.гггг',
         tasks: [
             {
-                name: "Разработка программного интерфейса",
-                changed: "Пон. 14:30",
+                name: "Разработка приложения",
+                changed: "25.10.2020",
                 status: "14 из 20",
-                percent: "70%"
+                percent: "70%",
+                id: 0
             },
             {
                 name: "Разработка программного интерфейса",
                 changed: "24.09.2020",
                 status: "Выполнен",
-                percent: "100%"
+                percent: "100%",
+                id: 1
             }
         ],
         arrStateLogin: true,
@@ -35,7 +38,9 @@ class TodoListPage extends Component {
         arrStateShow: false,
         arrStateInfo: false,
         newTask: false,
-        taskName: ''
+        taskName: '',
+        sortBy: 'name',
+        sortReverse: false
     };
 
     onRadioChange = (e) => {
@@ -107,7 +112,7 @@ class TodoListPage extends Component {
     };
 
     onAddTaskClick = () => {
-        let { taskName, tasks } = this.state;
+        let { taskName, tasks, sortBy, sortReverse } = this.state;
         const date = new Date();
         let month = date.getMonth();
         if (+month + 1 < 10) month = '0' + (+month + 1);
@@ -118,22 +123,100 @@ class TodoListPage extends Component {
             name: taskName,
             changed: `${day}.${month}.${date.getFullYear()}`,
             status: '',
-            percent: '0%'
+            percent: '0%',
+            id: tasks.length
         });
         this.setState({
             tasks: tasks,
             taskName: '',
             newTask: false
         });
+        this.switchSortFun(sortBy)(sortReverse);
     }
 
     onRedactClick = () => {
         this.props.history.push('/taskblocks');
     }
 
+    sortByName = (sortReverse) => {
+        const { tasks } = this.state;
+        tasks.sort((t1, t2) => {
+            if (t1.name < t2.name ) return -1;
+            else if (t1.name > t2.name) return 1;
+            else if (t1.id > t2.id) return -1;
+            else return 1;
+        });
+        if (sortReverse) tasks.reverse();
+        this.setState({
+            tasks
+        });
+    };
+
+    sortByChange = (sortReverse) => {
+        const { tasks } = this.state;
+        tasks.sort((t1, t2) => {
+            const [day1, month1, year1] = t1.changed.split('.', 3);
+            const ind1 = +year1 * 10000 + +month1 * 100  + +day1;
+            const [day2, month2, year2] = t2.changed.split('.', 3);
+            const ind2 = +year2 * 10000 + +month2 * 100  + +day2;
+            if (ind1 < ind2) return -1;
+            else if (ind1 > ind2) return 1;
+            else if (t1.id > t2.id) return -1;
+            else return 1;
+        });
+        if (sortReverse) tasks.reverse();
+        this.setState({
+            tasks
+        });
+    };
+
+    sortByStatus = (sortReverse) => {
+        const { tasks } = this.state;
+        tasks.sort((t1, t2) => {
+            const ind1 = +t1.percent.replace('%', '');
+            const ind2 = +t2.percent.replace('%', '');
+            if (ind1 < ind2) return -1;
+            if (ind1 > ind2) return 1;
+            else if (t1.id > t2.id) return -1;
+            else return 1;
+        });
+        if (sortReverse) tasks.reverse();
+        this.setState({
+            tasks
+        });
+    };
+
+    switchSortFun = (sortType) => {
+        let sortFun;
+        switch (sortType) {
+            case 'name':
+                sortFun = this.sortByName;
+                break;
+            case 'change':
+                sortFun = this.sortByChange;
+                break;
+            case 'status':
+                sortFun = this.sortByStatus;
+                break;
+            default:
+                break;
+        }
+        return sortFun;
+    };
+
+    onSortClick = (sortType) => {
+        const { sortReverse, sortBy } = this.state;
+        this.setState({
+            sortBy: sortType,
+            sortReverse: sortBy === sortType ? !sortReverse : false
+        });
+        let sortFun = this.switchSortFun(sortType);
+        sortFun(sortBy === sortType ? !sortReverse : false);
+    };
+
     render() {
         const { tasks, titleFilt, arrStateInfo, arrStatePeriod, arrStateLogin, arrStateShow,
-            arrStateTitle, newTask, taskName } = this.state;
+            arrStateTitle, newTask, taskName, sortBy, sortReverse } = this.state;
         return(
             <>
             <Modal className="modalTask" isOpen={ newTask } onRequestClose={ this.onNewTaskClick }
@@ -214,10 +297,25 @@ class TodoListPage extends Component {
                     </div>
                     <hr/>
                     <div className="rightTable">
-                        <div>
-                            <h3 className="greyH">Имя</h3>
-                            <h3 className="greyH">Изменен</h3>
-                            <h3 className="greyH">Статус</h3>
+                        <div className="topTable">
+                            <h3 className="greyH" onClick={ () => this.onSortClick("name") } 
+                                style={{color: sortBy === "name" && "#0047FF"}}
+                            >
+                                Имя
+                                { sortBy === "name" && <div className={ "sArrow" + (sortReverse ? "U" : "D") }/> }
+                            </h3>
+                            <h3 className="greyH" onClick={ () => this.onSortClick("change") }
+                                style={{color: sortBy === "change" && "#0047FF"}}
+                            >
+                                Изменен
+                                { sortBy === "change" && <div className={ "sArrow" + (sortReverse ? "U" : "D") }/> }
+                            </h3>
+                            <h3 className="greyH" onClick={ () => this.onSortClick("status") }
+                                style={{color: sortBy === "status" && "#0047FF"}}
+                            >
+                                Статус
+                                { sortBy === "status" && <div className={ "sArrow" + (sortReverse ? "U" : "D") }/> }
+                            </h3>
                             <h3/>
                         </div>
                         <hr/>

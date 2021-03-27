@@ -234,7 +234,7 @@ button {
             height: 618px;
             margin-left: 15px;
             div {
-                box-sizing: border-box;
+                //box-sizing: border-box;
                 border-bottom: 1px;
                 display: grid;
                 grid-template-columns: 384px 183px 183px 1fr;
@@ -250,6 +250,28 @@ button {
                     color: #0047FF;
                 }
                 #redact:hover {
+                    cursor: pointer;
+                }
+            }
+            .topTable {
+                h3 {
+                    @include noSelect();
+                    div {
+                        display: inline-block;
+                        margin-left: 5px;
+                        padding: unset;
+                        border-bottom: unset;
+                    }
+                    .sArrowU {
+                        transform: rotate(-45deg);
+                        margin-bottom: -0.5px;
+                    }
+                    .sArrowD {
+                        transform: rotate(135deg);
+                        margin-bottom: 4.5px;
+                    }
+                }
+                h3:hover {
                     cursor: pointer;
                 }
             }
