@@ -16,6 +16,7 @@ class TodoListPage extends Component {
         titleFilt: '',
         periodStart: 'дд.мм.гггг',
         periodEnd: 'дд.мм.гггг',
+        periodFilt: false,
         tasks: [
             {
                 name: "Разработка приложения",
@@ -74,13 +75,6 @@ class TodoListPage extends Component {
         const { arrStatePeriod } = this.state;
         this.setState({
             arrStatePeriod: !arrStatePeriod
-        });
-    };
-
-    onSortClick = () => {
-        const { arrStateSort } = this.state;
-        this.setState({
-            arrStateSort: !arrStateSort
         });
     };
 
@@ -214,8 +208,36 @@ class TodoListPage extends Component {
         sortFun(sortBy === sortType ? !sortReverse : false);
     };
 
+    onPeriodStartChange = (e) => {
+        const { periodEnd } = this.state;
+        this.setState({
+            periodStart: e.target.value,
+            periodFilt: e.target.value !== 'дд.мм.гггг' && periodEnd !== 'дд.мм.гггг' && this.getPeriodNum(e.target.value) <=
+                this.getPeriodNum(periodEnd)
+        });
+    };
+
+    onPeriodEndChange = (e) => {
+        const { periodStart } = this.state;
+        this.setState({
+            periodEnd: e.target.value,
+            periodFilt: periodStart !== 'дд.мм.гггг' && e.target.value !== 'дд.мм.гггг' && this.getPeriodNum(periodStart) <=
+                this.getPeriodNum(e.target.value)
+        });
+    };
+
+    getPeriodNum = (date) => {
+        const [year, month, day] = date.split('-', 3);
+        return +year * 10000 + +month * 100 + +day;
+    };
+
+    getDateNum = (date) => {
+        const [day, month, year] = date.split('.', 3);
+        return +year * 10000 + +month * 100 + +day;
+    }
+
     render() {
-        const { tasks, titleFilt, arrStateInfo, arrStatePeriod, arrStateLogin, arrStateShow,
+        const { tasks, titleFilt, periodStart, periodEnd, periodFilt, arrStateInfo, arrStatePeriod, arrStateLogin, arrStateShow,
             arrStateTitle, newTask, taskName, sortBy, sortReverse } = this.state;
         return(
             <>
@@ -270,11 +292,11 @@ class TodoListPage extends Component {
                             </h2>
                             { arrStatePeriod &&<>
                                 <div className="perInp">
-                                    <input type="date"/>
+                                    <input type="date" value={ periodStart } onChange={ this.onPeriodStartChange }/>
                                 </div>
                                 <div className="horLine"/>
                                 <div className="perInp">
-                                    <input type="date"/>
+                                    <input type="date" value={ periodEnd } onChange={ this.onPeriodEndChange }/>
                                 </div>
                             </> }
                         </div>
@@ -322,6 +344,9 @@ class TodoListPage extends Component {
                         {
                             tasks.map((task, id) => {
                                 return (
+                                    task.name.toLocaleLowerCase().startsWith(titleFilt.toLocaleLowerCase()) &&
+                                    (periodFilt ? (this.getDateNum(task.changed) >= this.getPeriodNum(periodStart) &&
+                                    this.getDateNum(task.changed) <= this.getPeriodNum(periodEnd)) : true) &&
                                     <>
                                         <div key={ id }>
                                             <h3>{ task.name }</h3>
