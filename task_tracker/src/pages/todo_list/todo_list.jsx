@@ -135,10 +135,10 @@ class TodoListPage extends Component {
     sortByName = (sortReverse) => {
         const { tasks } = this.state;
         tasks.sort((t1, t2) => {
-            if (t1.name < t2.name ) return -1;
-            else if (t1.name > t2.name) return 1;
-            else if (t1.id > t2.id) return -1;
-            else return 1;
+            if (t1.name.toLocaleLowerCase() < t2.name.toLocaleLowerCase() ) return -1;
+            else if (t1.name.toLocaleLowerCase() > t2.name.toLocaleLowerCase()) return 1;
+            else if (t1.id > t2.id) return 1;
+            else return -1;
         });
         if (sortReverse) tasks.reverse();
         this.setState({
