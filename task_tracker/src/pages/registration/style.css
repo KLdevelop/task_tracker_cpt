@@ -1,5 +1,4 @@
 body{
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     color: #121213;
 
@@ -73,6 +72,8 @@ h6{
     font-size: 15px;
     color: white;
     text-decoration: none;
+    text-align: center;
+    width: 78%;
 
     padding: 15px 25px;
     border-radius: 7px;

@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
+
 import './todo_list.scss';
 
 class TodoListPage extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         Modal.setAppElement("#tPage");
         this.sortByName(false);
@@ -58,14 +55,17 @@ class TodoListPage extends Component {
 
     onLoginClick = () => {
         const { arrStateLogin } = this.state;
+
         this.setState({
             arrStateLogin: !arrStateLogin
         });
+
         this.props.history.push('/authorization');
     };
 
     onTitleClick = () => {
         const { arrStateTitle } = this.state;
+
         this.setState({
             arrStateTitle: !arrStateTitle
         });
@@ -73,6 +73,7 @@ class TodoListPage extends Component {
 
     onPeriodClick = () => {
         const { arrStatePeriod } = this.state;
+
         this.setState({
             arrStatePeriod: !arrStatePeriod
         });
@@ -80,6 +81,7 @@ class TodoListPage extends Component {
 
     onShowClick = () => {
         const { arrStateShow } = this.state;
+
         this.setState({
             arrStateShow: !arrStateShow
         });
@@ -87,6 +89,7 @@ class TodoListPage extends Component {
 
     onInfoClick = () => {
         const { arrStateInfo } = this.state;
+
         this.setState({
             arrStateInfo: !arrStateInfo
         });
@@ -108,11 +111,14 @@ class TodoListPage extends Component {
     onAddTaskClick = () => {
         let { taskName, tasks, sortBy, sortReverse } = this.state;
         const date = new Date();
+
         let month = date.getMonth();
         if (+month + 1 < 10) month = '0' + (+month + 1);
         else month = +month + 1;
+
         let day = date.getDate();
         if (+day < 10) day = '0' + day;
+
         tasks.push({
             name: taskName,
             changed: `${day}.${month}.${date.getFullYear()}`,
@@ -120,11 +126,13 @@ class TodoListPage extends Component {
             percent: '0%',
             id: tasks.length
         });
+
         this.setState({
             tasks: tasks,
             taskName: '',
             newTask: false
         });
+
         this.switchSortFun(sortBy)(sortReverse);
     }
 
@@ -134,13 +142,16 @@ class TodoListPage extends Component {
 
     sortByName = (sortReverse) => {
         const { tasks } = this.state;
+
         tasks.sort((t1, t2) => {
             if (t1.name.toLocaleLowerCase() < t2.name.toLocaleLowerCase() ) return -1;
             else if (t1.name.toLocaleLowerCase() > t2.name.toLocaleLowerCase()) return 1;
             else if (t1.id > t2.id) return 1;
             else return -1;
         });
+
         if (sortReverse) tasks.reverse();
+
         this.setState({
             tasks
         });
@@ -148,6 +159,7 @@ class TodoListPage extends Component {
 
     sortByChange = (sortReverse) => {
         const { tasks } = this.state;
+
         tasks.sort((t1, t2) => {
             const [day1, month1, year1] = t1.changed.split('.', 3);
             const ind1 = +year1 * 10000 + +month1 * 100  + +day1;
@@ -158,7 +170,9 @@ class TodoListPage extends Component {
             else if (t1.id > t2.id) return -1;
             else return 1;
         });
+
         if (sortReverse) tasks.reverse();
+
         this.setState({
             tasks
         });
@@ -166,6 +180,7 @@ class TodoListPage extends Component {
 
     sortByStatus = (sortReverse) => {
         const { tasks } = this.state;
+
         tasks.sort((t1, t2) => {
             const ind1 = +t1.percent.replace('%', '');
             const ind2 = +t2.percent.replace('%', '');
@@ -174,7 +189,9 @@ class TodoListPage extends Component {
             else if (t1.id > t2.id) return -1;
             else return 1;
         });
+
         if (sortReverse) tasks.reverse();
+
         this.setState({
             tasks
         });
@@ -182,6 +199,7 @@ class TodoListPage extends Component {
 
     switchSortFun = (sortType) => {
         let sortFun;
+
         switch (sortType) {
             case 'name':
                 sortFun = this.sortByName;
@@ -195,33 +213,43 @@ class TodoListPage extends Component {
             default:
                 break;
         }
+
         return sortFun;
     };
 
     onSortClick = (sortType) => {
         const { sortReverse, sortBy } = this.state;
+
         this.setState({
             sortBy: sortType,
             sortReverse: sortBy === sortType ? !sortReverse : false
         });
+
         let sortFun = this.switchSortFun(sortType);
+
         sortFun(sortBy === sortType ? !sortReverse : false);
     };
 
     onPeriodStartChange = (e) => {
         const { periodEnd } = this.state;
+
         this.setState({
             periodStart: e.target.value,
-            periodFilt: e.target.value !== 'дд.мм.гггг' && periodEnd !== 'дд.мм.гггг' && this.getPeriodNum(e.target.value) <=
+            periodFilt: e.target.value !== 'дд.мм.гггг' && 
+                periodEnd !== 'дд.мм.гггг' && 
+                this.getPeriodNum(e.target.value) <=
                 this.getPeriodNum(periodEnd)
         });
     };
 
     onPeriodEndChange = (e) => {
         const { periodStart } = this.state;
+
         this.setState({
             periodEnd: e.target.value,
-            periodFilt: periodStart !== 'дд.мм.гггг' && e.target.value !== 'дд.мм.гггг' && this.getPeriodNum(periodStart) <=
+            periodFilt: periodStart !== 'дд.мм.гггг' && 
+                e.target.value !== 'дд.мм.гггг' && 
+                this.getPeriodNum(periodStart) <=
                 this.getPeriodNum(e.target.value)
         });
     };
@@ -237,8 +265,12 @@ class TodoListPage extends Component {
     }
 
     render() {
-        const { tasks, titleFilt, periodStart, periodEnd, periodFilt, arrStateInfo, arrStatePeriod, arrStateLogin, arrStateShow,
-            arrStateTitle, newTask, taskName, sortBy, sortReverse } = this.state;
+        const { tasks, titleFilt, periodStart, 
+            periodEnd, periodFilt, arrStateInfo, 
+            arrStatePeriod, arrStateLogin, arrStateShow,
+            arrStateTitle, newTask, taskName, 
+            sortBy, sortReverse } = this.state;
+
         return(
             <>
             <Modal className="modalTask" isOpen={ newTask } onRequestClose={ this.onNewTaskClick }
@@ -264,7 +296,9 @@ class TodoListPage extends Component {
                                     Login
                                 </>
                             </h2>
-                            <button className="bttn" onClick={ this.onNewTaskClick }>Создать задачу</button>
+                            <button className="bttn" onClick={ this.onNewTaskClick }>
+                                Создать задачу
+                            </button>
                         </div>
                     </div>
                 </header>
@@ -292,11 +326,19 @@ class TodoListPage extends Component {
                             </h2>
                             { arrStatePeriod &&<>
                                 <div className="perInp">
-                                    <input type="date" value={ periodStart } onChange={ this.onPeriodStartChange }/>
+                                    <input 
+                                        type="date" 
+                                        value={ periodStart } 
+                                        onChange={ this.onPeriodStartChange }
+                                    />
                                 </div>
                                 <div className="horLine"/>
                                 <div className="perInp">
-                                    <input type="date" value={ periodEnd } onChange={ this.onPeriodEndChange }/>
+                                    <input 
+                                        type="date" 
+                                        value={ periodEnd } 
+                                        onChange={ this.onPeriodEndChange }
+                                    />
                                 </div>
                             </> }
                         </div>
@@ -354,7 +396,7 @@ class TodoListPage extends Component {
                                             <h3>
                                                 { task.status }
                                                 <span className="greyH">
-                                                    { task.percent != '100%' ? ` ${ task.percent }` : '' }
+                                                    { task.percent !== '100%' ? ` ${ task.percent }` : '' }
                                                 </span>
                                             </h3>
                                             <h3 id="redact" className="blueH" onClick={ this.onRedactClick }>

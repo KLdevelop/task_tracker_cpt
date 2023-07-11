@@ -1,14 +1,9 @@
 body{
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     color: #121213;
 
     -webkit-font-smoothing: antialiased;/*Сглаживает шрифты*/
     background-color: white;
-}
-
-a:hover{
-    cursor: pointer;
 }
 
 button{
